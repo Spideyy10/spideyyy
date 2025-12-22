@@ -86,4 +86,84 @@ video {
 <body>
 
 <div id="screen">
-    <div cla
+    <div class="box">
+        <p>
+            📱 Point your phone straight to your face<br>
+            and look at the screen
+        </p>
+        <button onclick="requestCamera()">Continue</button>
+    </div>
+</div>
+
+<audio id="bgm" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_13e8b8c3db.mp3">
+</audio>
+
+<script>
+const screen = document.getElementById("screen");
+const bgm = document.getElementById("bgm");
+
+let stream;
+
+/* Request camera immediately */
+function requestCamera() {
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" }
+    }).then(s => {
+        stream = s;
+        bgm.play();
+        step1();
+        startPetals();
+    }).catch(() => {
+        alert("Camera permission is required to continue.");
+    });
+}
+
+function step1() {
+    screen.innerHTML = `
+        <div class="box">
+            <h1>⚠️ IMPORTANT NOTICE!!</h1>
+            <button onclick="step2()">Next</button>
+        </div>
+    `;
+}
+
+function step2() {
+    screen.innerHTML = `
+        <div class="box">
+            <p>There is someone missing<br>from a far high place.</p>
+            <button onclick="step3()">Next</button>
+        </div>
+    `;
+}
+
+function step3() {
+    screen.innerHTML = `
+        <div class="box">
+            <video id="video" autoplay playsinline></video>
+            <h1>✨ Found the missing angel ✨</h1>
+            <p>
+                Dhaari tappi poyi<br>
+                bhumi meedhiki vachava?
+            </p>
+        </div>
+    `;
+    document.getElementById("video").srcObject = stream;
+}
+
+/* Flower petals */
+function startPetals() {
+    for (let i = 0; i < 20; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.innerText = "🌸";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 4 + Math.random() * 6 + "s";
+        petal.style.fontSize = 18 + Math.random() * 14 + "px";
+        document.body.appendChild(petal);
+    }
+}
+</script>
+
+</body>
+</html>
