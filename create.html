@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Guess the Indian Scientist</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0b0b;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.box {
+    max-width: 500px;
+    margin: auto;
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+input {
+    width: 90%;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(45deg, cyan, pink);
+    color: black;
+}
+
+img {
+    width: 200px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.correct {
+    color: #4CAF50;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.wrong {
+    color: #ff5252;
+    font-size: 20px;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 Guess the Indian Scientist</h1>
+
+<div class="box" id="game"></div>
+
+<script>
+const scientists = [
+    {
+        name: "c v raman",
+        clues: [
+            "He won the Nobel Prize in Physics (1930).",
+            "He discovered the Raman Effect.",
+            "He was an Indian physicist."
+        ],
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/88/CV_Raman.JPG"
+    },
+    {
+        name: "a p j abdul kalam",
+        clues: [
+            "Known as the Missile Man of India.",
+            "He was the 11th President of India.",
+            "He worked at ISRO and DRDO."
+        ],
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/6e/A_P_J_Abdul_Kalam.jpg"
+    },
+    {
+        name: "jagdish chandra bose",
+        clues: [
+            "He was a biologist and physicist.",
+            "He pioneered radio and microwave optics.",
+            "He proved plants have life."
+        ],
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Jagdish_Chandra_Bose.jpg"
+    }
+];
+
+let current = scientists[Math.floor(Math.random() * scientists.length)];
+
+function renderGame(message = "") {
+    document.getElementById("game").innerHTML = `
+        <p><strong>Clues:</strong></p>
+        <p>• ${current.clues[0]}</p>
+        <p>• ${current.clues[1]}</p>
+        <p>• ${current.clues[2]}</p>
+
+        <input type="text" id="guess" placeholder="Enter scientist name">
+        <br>
+        <button onclick="checkAnswer()">Guess</button>
+
+        <div>${message}</div>
+    `;
+}
+
+function checkAnswer() {
+    const userGuess = document.getElementById("guess").value.toLowerCase().trim();
+
+    if (userGuess === current.name) {
+        renderGame(`
+            <div class="correct">✅ Correct!</div>
+            <img src="${current.image}">
+        `);
+    } else {
+        renderGame(`<div class="wro
