@@ -21,7 +21,7 @@ h1 {
 }
 
 .box {
-    max-width: 500px;
+    max-width: 550px;
     margin: auto;
     background: #1c1c1c;
     padding: 20px;
@@ -43,9 +43,9 @@ input {
 }
 
 button {
-    margin-top: 15px;
-    padding: 12px 25px;
-    font-size: 18px;
+    margin: 10px 5px;
+    padding: 12px 22px;
+    font-size: 16px;
     border-radius: 25px;
     border: none;
     cursor: pointer;
@@ -62,13 +62,11 @@ img {
 .correct {
     color: #4CAF50;
     font-size: 24px;
-    margin-top: 10px;
 }
 
 .wrong {
     color: #ff5252;
     font-size: 20px;
-    margin-top: 10px;
 }
 </style>
 </head>
@@ -83,57 +81,162 @@ img {
 const scientists = [
     {
         name: "c v raman",
-        clues: [
-            "He won the Nobel Prize in Physics (1930).",
-            "He discovered the Raman Effect.",
-            "He was an Indian physicist."
-        ],
-        image: "https://upload.wikimedia.org/wikipedia/commons/8/88/CV_Raman.JPG"
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/88/CV_Raman.JPG",
+        hints: [
+            "He was an Indian physicist.",
+            "He worked on the behavior of light.",
+            "He made a discovery named after him.",
+            "He won a Nobel Prize.",
+            "He won the Nobel Prize in Physics in 1930.",
+            "His discovery explains color changes in light.",
+            "He founded the Indian Academy of Sciences.",
+            "He received the Bharat Ratna."
+        ]
     },
     {
         name: "a p j abdul kalam",
-        clues: [
-            "Known as the Missile Man of India.",
-            "He was the 11th President of India.",
-            "He worked at ISRO and DRDO."
-        ],
-        image: "https://upload.wikimedia.org/wikipedia/commons/6/6e/A_P_J_Abdul_Kalam.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/6e/A_P_J_Abdul_Kalam.jpg",
+        hints: [
+            "He was an aerospace engineer.",
+            "He worked with missiles.",
+            "He worked at ISRO.",
+            "He was called the Missile Man of India.",
+            "He later became the President of India.",
+            "He wrote 'Wings of Fire'.",
+            "He played a key role in Pokhran-II.",
+            "He received the Bharat Ratna."
+        ]
     },
     {
         name: "jagdish chandra bose",
-        clues: [
-            "He was a biologist and physicist.",
-            "He pioneered radio and microwave optics.",
-            "He proved plants have life."
-        ],
-        image: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Jagdish_Chandra_Bose.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Jagdish_Chandra_Bose.jpg",
+        hints: [
+            "He was a physicist and biologist.",
+            "He studied plant responses.",
+            "He proved plants respond to stimuli.",
+            "He worked with radio waves.",
+            "He was a pioneer of wireless communication.",
+            "He invented the crescograph.",
+            "He founded the Bose Institute.",
+            "He refused to patent inventions."
+        ]
+    },
+    {
+        name: "homibhabha",
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Homi_J._Bhabha.jpg",
+        hints: [
+            "He was a nuclear physicist.",
+            "He played a major role in India’s nuclear program.",
+            "He founded TIFR.",
+            "He is known as the father of Indian nuclear science.",
+            "He worked on atomic energy.",
+            "He helped establish BARC.",
+            "He was educated at Cambridge.",
+            "He died in an air crash."
+        ]
+    },
+    {
+        name: "vikram sarabhai",
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Vikram_Sarabhai.jpg",
+        hints: [
+            "He was a space scientist.",
+            "He is known as the father of India’s space program.",
+            "He founded ISRO.",
+            "He worked on satellite technology.",
+            "He believed space technology helps development.",
+            "He helped establish PRL.",
+            "He received the Padma Bhushan.",
+            "He inspired India’s space missions."
+        ]
+    },
+    {
+        name: "satyendra nath bose",
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Satyendra_Nath_Bose.jpg",
+        hints: [
+            "He was a mathematician and physicist.",
+            "He worked with Albert Einstein.",
+            "He developed Bose–Einstein statistics.",
+            "A particle is named after him.",
+            "Bosons are named after him.",
+            "He worked in quantum mechanics.",
+            "He taught in India.",
+            "He received the Padma Vibhushan."
+        ]
+    },
+    {
+        name: "meghnad saha",
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Meghnad_Saha.jpg",
+        hints: [
+            "He was an astrophysicist.",
+            "He developed the Saha ionization equation.",
+            "His work explains stellar spectra.",
+            "He contributed to astrophysics.",
+            "He worked on thermal ionization.",
+            "He was a professor in India.",
+            "He helped establish scientific institutions.",
+            "He was elected to Parliament."
+        ]
     }
 ];
 
 let current = scientists[Math.floor(Math.random() * scientists.length)];
+let shownHints = 5;
+let gameOver = false;
 
-function renderGame(message = "") {
+function render(message = "") {
+    let hintsHtml = "";
+    for (let i = 0; i < shownHints; i++) {
+        hintsHtml += `<p>• ${current.hints[i]}</p>`;
+    }
+
     document.getElementById("game").innerHTML = `
-        <p><strong>Clues:</strong></p>
-        <p>• ${current.clues[0]}</p>
-        <p>• ${current.clues[1]}</p>
-        <p>• ${current.clues[2]}</p>
+        <p><strong>Hints:</strong></p>
+        ${hintsHtml}
 
+        ${!gameOver ? `
         <input type="text" id="guess" placeholder="Enter scientist name">
         <br>
-        <button onclick="checkAnswer()">Guess</button>
+        <button onclick="checkAnswer()">Submit Answer</button>
+        <br>
+        ${shownHints < 8 ? `<button onclick="moreHint()">Get Extra Hint</button>` : ""}
+        <button onclick="giveUp()">Give Up</button>
+        ` : ""}
 
         <div>${message}</div>
     `;
 }
 
 function checkAnswer() {
-    const userGuess = document.getElementById("guess").value.toLowerCase().trim();
-
-    if (userGuess === current.name) {
-        renderGame(`
+    const guess = document.getElementById("guess").value.toLowerCase().trim();
+    if (guess === current.name) {
+        gameOver = true;
+        render(`
             <div class="correct">✅ Correct!</div>
             <img src="${current.image}">
         `);
     } else {
-        renderGame(`<div class="wro
+        render(`<div class="wrong">❌ Incorrect. Try again or take a hint.</div>`);
+    }
+}
+
+function moreHint() {
+    if (shownHints < current.hints.length) {
+        shownHints++;
+        render();
+    }
+}
+
+function giveUp() {
+    gameOver = true;
+    render(`
+        <div class="wrong">The correct answer is:</div>
+        <p><strong>${current.name.toUpperCase()}</strong></p>
+        <img src="${current.image}">
+    `);
+}
+
+render();
+</script>
+
+</body>
+</html>
