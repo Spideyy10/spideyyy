@@ -1,3 +1,3 @@
 # spideyyy
 
-click on the hi.html file
+click on the index.html file
